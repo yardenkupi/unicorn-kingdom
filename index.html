@@ -58,6 +58,9 @@ button:focus-visible{outline:4px solid #fff;outline-offset:4px}
 .ico{width:54%;height:54%;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .ico .f{fill:currentColor;stroke:none}
 .star{display:block;width:1em;height:1em}
+/* איורי הפריטים והמדבקות */
+.ic{display:block;width:1.24em;height:1.24em;overflow:visible;filter:drop-shadow(0 .05em .05em rgba(72,44,140,.28))}
+.group .ic,.hand .ic{width:1em;height:1em}
 .rbtn{position:relative;flex:none;width:var(--btn);height:var(--btn);border-radius:50%;
   background:linear-gradient(#fff,#f3ecff);box-shadow:var(--clay);color:var(--violet);display:grid;place-items:center}
 .pill{flex:none;height:var(--btn);padding:0 clamp(12px,2.6vmin,24px);border-radius:99px;
@@ -159,7 +162,8 @@ body.mute .ear{display:none}
   align-items:center;justify-items:center;gap:clamp(10px,3vmin,40px)}
 .hero{display:flex;flex-direction:column;align-items:center;gap:clamp(4px,1.6vmin,16px);min-width:0;max-width:100%}
 .hero .mascot{width:min(100%,44vmin)}
-.menu{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2.4vmin,26px);width:100%;max-width:118vmin}
+.menu{--g:clamp(10px,2.2vmin,22px);display:flex;flex-wrap:wrap;justify-content:center;gap:var(--g);width:100%;max-width:124vmin}
+.menu .mtile{flex:0 0 calc((100% - 3 * var(--g)) / 4)}
 .mtile{position:relative;aspect-ratio:1.05;border-radius:clamp(22px,4.4vmin,44px);overflow:hidden;
   background:linear-gradient(160deg,var(--c1),var(--c2));
   box-shadow:inset 0 2px 0 rgba(255,255,255,.7),inset 0 -12px 22px rgba(60,30,120,.10),0 18px 28px -10px var(--cs),0 3px 6px rgba(72,44,140,.12);
@@ -173,7 +177,8 @@ body.mute .ear{display:none}
   .home{grid-template-columns:1fr;grid-template-rows:auto 1fr;align-content:center}
   .hero{flex-direction:row}
   .hero .mascot{width:clamp(72px,24vmin,150px)}
-  .menu{grid-template-columns:repeat(2,1fr);max-width:92vmin;align-self:start}
+  .menu{max-width:96vmin;align-self:start}
+  .menu .mtile{flex-basis:calc((100% - 2 * var(--g)) / 3);font-size:clamp(13px,3.4vmin,22px)}
 }
 .start{flex:1;min-height:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:clamp(8px,2vmin,20px)}
@@ -314,6 +319,11 @@ body.mute .ear{display:none}
     <linearGradient id="gPeach" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0dc"/><stop offset="1" stop-color="#f6c894"/></linearGradient>
     <linearGradient id="gHair" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b47a50"/><stop offset="1" stop-color="#6f4329"/></linearGradient>
     <linearGradient id="gWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#e3d8ff"/></linearGradient>
+    <linearGradient id="gRed" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9aa6"/><stop offset="1" stop-color="#ec3f58"/></linearGradient>
+    <linearGradient id="gGreen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b6f0bd"/><stop offset="1" stop-color="#31b56a"/></linearGradient>
+    <linearGradient id="gOrange" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd596"/><stop offset="1" stop-color="#ff9a3d"/></linearGradient>
+    <linearGradient id="gTan" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbe3c0"/><stop offset="1" stop-color="#e3ad6e"/></linearGradient>
+    <linearGradient id="gBrown" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c98d5c"/><stop offset="1" stop-color="#8f5631"/></linearGradient>
     <radialGradient id="gShade" cx=".4" cy=".32" r=".78"><stop offset=".45" stop-color="#3c1470" stop-opacity="0"/><stop offset="1" stop-color="#3c1470" stop-opacity=".38"/></radialGradient>
   </defs>
 </svg>
@@ -409,11 +419,11 @@ const NUM_F = ['', 'אחת', 'שתיים', 'שלוש', 'ארבע', 'חמש', 'ש
 const NUM_M = ['', 'אחד', 'שניים', 'שלושה', 'ארבעה', 'חמישה', 'שישה', 'שבעה', 'שמונה', 'תשעה', 'עשרה'];
 // כל הפריטים בלשון זכר, כדי שהספירה ("שלושה כתרים") תהיה תקינה
 const ITEMS = [
-  { e: '🦄', one: 'חד קרן', many: 'חדי קרן' }, { e: '👑', one: 'כתר', many: 'כתרים' },
-  { e: '⭐', one: 'כוכב', many: 'כוכבים' }, { e: '🦋', one: 'פרפר', many: 'פרפרים' },
-  { e: '🌸', one: 'פרח', many: 'פרחים' }, { e: '🎈', one: 'בלון', many: 'בלונים' },
-  { e: '🍎', one: 'תפוח', many: 'תפוחים' }, { e: '💎', one: 'יהלום', many: 'יהלומים' },
-  { e: '🐥', one: 'אפרוח', many: 'אפרוחים' }, { e: '❤️', one: 'לב', many: 'לבבות' },
+  { i: 'unicorn', one: 'חד קרן', many: 'חדי קרן' }, { i: 'crown', one: 'כתר', many: 'כתרים' },
+  { i: 'star', one: 'כוכב', many: 'כוכבים' }, { i: 'butterfly', one: 'פרפר', many: 'פרפרים' },
+  { i: 'flower', one: 'פרח', many: 'פרחים' }, { i: 'balloon', one: 'בלון', many: 'בלונים' },
+  { i: 'apple', one: 'תפוח', many: 'תפוחים' }, { i: 'gem', one: 'יהלום', many: 'יהלומים' },
+  { i: 'chick', one: 'אפרוח', many: 'אפרוחים' }, { i: 'heart', one: 'לב', many: 'לבבות' },
 ];
 const phrase = (n, it) => n === 1 ? `${it.one} אחד` : n === 2 ? `שני ${it.many}` : `${NUM_M[n]} ${it.many}`;
 const COLORS = [
@@ -421,6 +431,20 @@ const COLORS = [
   { name: 'ירוק', hex: '#35c172' }, { name: 'ורוד', hex: '#ff7fb5' }, { name: 'סגול', hex: '#9a78f0' },
   { name: 'כתום', hex: '#ff9a3d' },
 ];
+// מילים באנגלית: המפתח הוא המילה העברית שמוצגת במשחק
+const EN_NUM = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+const EN = {
+  'אדום': 'red', 'כחול': 'blue', 'צהוב': 'yellow', 'ירוק': 'green', 'ורוד': 'pink', 'סגול': 'purple', 'כתום': 'orange',
+  'תכלת': 'light blue', 'חום': 'brown', 'אפרסק': 'peach', 'צבע קסם': 'rainbow',
+  'עיגול': 'circle', 'ריבוע': 'square', 'משולש': 'triangle', 'כוכב': 'star', 'לב': 'heart', 'מלבן': 'rectangle', 'מעוין': 'diamond',
+  'חד קרן': 'unicorn', 'כתר': 'crown', 'פרפר': 'butterfly', 'פרח': 'flower', 'בלון': 'balloon', 'תפוח': 'apple', 'יהלום': 'diamond',
+  'אפרוח': 'chick', 'נסיכה': 'princess', 'ארמון': 'castle', 'קשת בענן': 'rainbow', 'שרביט קסמים': 'magic wand', 'חתול': 'cat',
+  'כלב': 'dog', 'ארנב': 'bunny', 'תות': 'strawberry', 'עוגה': 'cupcake', 'סרט': 'bow', 'ירח': 'moon', 'שמש': 'sun',
+  'חיפושית': 'ladybug', 'דג': 'fish', 'צב': 'turtle', 'גלידה': 'ice cream', 'גביע': 'trophy',
+};
+const EN_MANY = { unicorn: 'unicorns', crown: 'crowns', star: 'stars', butterfly: 'butterflies', flower: 'flowers', balloon: 'balloons',
+  apple: 'apples', diamond: 'diamonds', chick: 'chicks', heart: 'hearts' };
+const enPhrase = (n, it) => `${EN_NUM[n]} ${n === 1 ? EN[it.one] : EN_MANY[EN[it.one]]}`;
 const PAINTS = [COLORS[4], COLORS[5], COLORS[0], COLORS[6], COLORS[2], COLORS[3],
   { name: 'תכלת', hex: '#7fd4ff' }, COLORS[1], { name: 'חום', hex: '#a86b3c' }, { name: 'אפרסק', hex: '#ffd2b0' },
   { name: 'צבע קסם', rainbow: true }];
@@ -441,13 +465,14 @@ const SHAPES = [
 ];
 // צורה "תלת־ממדית רכה": צבע, פינות מעוגלות (קו עבה באותו צבע), הצללה והברקה
 const shapeSvg = (s, hex) => `<svg viewBox="0 0 100 100" width="76%" height="76%" aria-hidden="true" style="overflow:visible;filter:drop-shadow(0 5px 5px rgba(72,44,140,.28))"><g style="fill:${hex};stroke:${hex};stroke-width:9;stroke-linejoin:round">${s.d}</g><g style="fill:url(#gShade);stroke:url(#gShade);stroke-width:9;stroke-linejoin:round;opacity:.5">${s.d}</g><ellipse cx="36" cy="32" rx="10" ry="6" transform="rotate(-25 36 32)" fill="#fff" opacity=".5"/></svg>`;
+// e הוא המזהה שנשמר בזיכרון הדפדפן (לא מוצג); i הוא שם האיור
 const STICKERS = [
-  { e: '🦄', name: 'חד קרן' }, { e: '👸', name: 'נסיכה' }, { e: '🏰', name: 'ארמון' }, { e: '👑', name: 'כתר' },
-  { e: '🌈', name: 'קשת בענן' }, { e: '⭐', name: 'כוכב' }, { e: '🦋', name: 'פרפר' }, { e: '🌸', name: 'פרח' },
-  { e: '💎', name: 'יהלום' }, { e: '🧚', name: 'פיה' }, { e: '🐱', name: 'חתול' }, { e: '🐶', name: 'כלב' },
-  { e: '🐰', name: 'ארנב' }, { e: '🍓', name: 'תות' }, { e: '🧁', name: 'עוגה' }, { e: '🎈', name: 'בלון' },
-  { e: '🎀', name: 'סרט' }, { e: '🌙', name: 'ירח' }, { e: '☀️', name: 'שמש' }, { e: '🐞', name: 'חיפושית' },
-  { e: '🐬', name: 'דולפין' }, { e: '🐢', name: 'צב' }, { e: '🍦', name: 'גלידה' }, { e: '🐥', name: 'אפרוח' },
+  { e: '🦄', i: 'unicorn', name: 'חד קרן' }, { e: '👸', i: 'princess', name: 'נסיכה' }, { e: '🏰', i: 'castle', name: 'ארמון' }, { e: '👑', i: 'crown', name: 'כתר' },
+  { e: '🌈', i: 'rainbow', name: 'קשת בענן' }, { e: '⭐', i: 'star', name: 'כוכב' }, { e: '🦋', i: 'butterfly', name: 'פרפר' }, { e: '🌸', i: 'flower', name: 'פרח' },
+  { e: '💎', i: 'gem', name: 'יהלום' }, { e: '🧚', i: 'wand', name: 'שרביט קסמים' }, { e: '🐱', i: 'cat', name: 'חתול' }, { e: '🐶', i: 'dog', name: 'כלב' },
+  { e: '🐰', i: 'bunny', name: 'ארנב' }, { e: '🍓', i: 'strawberry', name: 'תות' }, { e: '🧁', i: 'cupcake', name: 'עוגה' }, { e: '🎈', i: 'balloon', name: 'בלון' },
+  { e: '🎀', i: 'bow', name: 'סרט' }, { e: '🌙', i: 'moon', name: 'ירח' }, { e: '☀️', i: 'sun', name: 'שמש' }, { e: '🐞', i: 'ladybug', name: 'חיפושית' },
+  { e: '🐬', i: 'fish', name: 'דג' }, { e: '🐢', i: 'turtle', name: 'צב' }, { e: '🍦', i: 'icecream', name: 'גלידה' }, { e: '🐥', i: 'chick', name: 'אפרוח' },
 ];
 const PRAISE = ['כל הכבוד!', 'יופי!', 'מצוין!', 'נהדר!', 'אלופה!', 'איזו חכמה!', 'יפה מאוד!'];
 
@@ -484,6 +509,123 @@ function balloon(hex, label, i, aria) {
   if (label != null) b.append(el('span', { text: label }));
   return b;
 }
+
+/* ---------- איורי פריטים ומדבקות: כל איור מוגדר פעם אחת כ-symbol ומשוכפל עם <use> ---------- */
+const eye = (x, y, r = 4.6) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#3a2a66"/><circle cx="${x + r * .34}" cy="${y - r * .36}" r="${r * .36}" fill="#fff"/>`;
+const blush = (x, y, rx = 6, ry = 3.8) => `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="#ff8fb8" opacity=".55"/>`;
+const smile = (x, y, w = 6) => `<path d="M${x - w} ${y} Q${x} ${y + w * .95} ${x + w} ${y}" fill="none" stroke="#3a2a66" stroke-width="2.4" stroke-linecap="round"/>`;
+const gloss = (x, y, rx, ry, rot = -25) => `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" transform="rotate(${rot} ${x} ${y})" fill="#fff" opacity=".5"/>`;
+const around = (n, R, fn, a0 = -90) => range(0, n - 1).map(k => { const a = (a0 + k * 360 / n) * Math.PI / 180; return fn(50 + R * Math.cos(a), 50 + R * Math.sin(a), a0 + k * 360 / n); }).join('');
+const W = 'stroke="rgba(126,96,204,.45)" stroke-width="1.2"';
+const INK = 'fill="none" stroke="#3a2a66" stroke-width="2.3" stroke-linecap="round"';
+const SYM = {
+  unicorn: `<path d="M16 44 C6 54 6 74 14 86 C18 90 24 86 23 80 C22 72 18 64 22 54 Z" fill="url(#gPink)"/>
+    <path d="M22 36 C16 16 26 6 34 6 C38 16 37 28 33 38 Z" fill="url(#gWhite)" ${W}/><path d="M78 36 C84 16 74 6 66 6 C62 16 63 28 67 38 Z" fill="url(#gWhite)" ${W}/>
+    <path d="M50 1 L59 30 Q50 34 41 30 Z" fill="url(#gHorn)"/>
+    <ellipse cx="50" cy="58" rx="38" ry="34" fill="url(#gWhite)" ${W}/><ellipse cx="50" cy="75" rx="22" ry="14" fill="url(#gSnout)"/>
+    <path d="M30 34 C36 20 62 18 70 32 C74 40 67 46 62 41 C57 36 51 36 47 40 C41 45 31 44 30 34 Z" fill="url(#gLilac)"/>
+    <path d="M64 30 C76 31 82 42 79 52 C77 57 71 55 72 50 C73 44 69 39 62 37 Z" fill="url(#gPink)"/>
+    ${eye(34, 60, 5.5)}${eye(66, 60, 5.5)}${blush(21, 71)}${blush(79, 71)}
+    <circle cx="45" cy="74" r="1.3" fill="#c58bb0"/><circle cx="55" cy="74" r="1.3" fill="#c58bb0"/>${smile(50, 79, 5)}`,
+  princess: `<path d="M14 58 C8 14 92 14 86 58 C88 76 93 88 85 96 H15 C7 88 12 76 14 58 Z" fill="url(#gHair)"/>
+    <circle cx="50" cy="60" r="30" fill="url(#gSkin)"/>
+    <path d="M21 56 C19 31 42 23 54 28 C73 25 82 41 79 58 C73 45 63 39 52 40 C48 49 35 55 21 56 Z" fill="url(#gHair)"/>
+    <path d="M33 27 L30 6 L41 17 L50 2 L59 17 L70 6 L67 27 Q50 21 33 27 Z" fill="url(#gHorn)"/><circle cx="50" cy="16" r="2.8" fill="#ff6aab"/>
+    ${eye(39, 64)}${eye(61, 64)}${blush(28, 74)}${blush(72, 74)}${smile(50, 76, 5.5)}`,
+  castle: `<rect x="11" y="42" width="23" height="50" rx="2" fill="url(#gWall)" ${W}/><rect x="66" y="42" width="23" height="50" rx="2" fill="url(#gWall)" ${W}/>
+    <rect x="31" y="58" width="38" height="34" fill="url(#gWall)" ${W}/><rect x="38" y="30" width="24" height="34" rx="2" fill="url(#gWall)" ${W}/>
+    <path d="M6 44 L22.500 16 L39 44 Z" fill="url(#gPink)"/><path d="M61 44 L77.500 16 L94 44 Z" fill="url(#gPink)"/><path d="M32 32 L50 4 L68 32 Z" fill="url(#gLilac)"/>
+    <path d="M42 92 V76 a8 8 0 0 1 16 0 V92 Z" fill="url(#gLilac)"/>
+    <circle cx="22.500" cy="60" r="4.600" fill="url(#gSun)"/><circle cx="77.500" cy="60" r="4.600" fill="url(#gSun)"/><circle cx="50" cy="45" r="4.600" fill="url(#gSun)"/>`,
+  crown: `<path d="M14 72 L8 28 L30 47 L50 16 L70 47 L92 28 L86 72 Q50 82 14 72 Z" fill="url(#gHorn)"/>
+    <path d="M14 72 Q50 82 86 72 L85 82 Q50 92 15 82 Z" fill="#ffab33"/>
+    <circle cx="8" cy="27" r="5.500" fill="url(#gSun)"/><circle cx="50" cy="15" r="5.500" fill="url(#gSun)"/><circle cx="92" cy="27" r="5.500" fill="url(#gSun)"/>
+    <circle cx="50" cy="58" r="7.500" fill="url(#gPink)"/><circle cx="28" cy="62" r="5" fill="url(#gSky)"/><circle cx="72" cy="62" r="5" fill="url(#gSky)"/>${gloss(24, 44, 3, 8, 20)}`,
+  rainbow: `<g fill="none" stroke-width="8.500"><path d="M10 78 A40 40 0 0 1 90 78" stroke="#ff7fa0"/><path d="M18.500 78 A31.500 31.500 0 0 1 81.500 78" stroke="#ffc35a"/>
+    <path d="M27 78 A23 23 0 0 1 73 78" stroke="#7fdc9f"/><path d="M35.500 78 A14.500 14.500 0 0 1 64.500 78" stroke="#7ab8ff"/></g>
+    <g fill="#fff"><circle cx="10" cy="80" r="10"/><circle cx="22" cy="83" r="8"/><circle cx="2" cy="85" r="6"/><circle cx="90" cy="80" r="10"/><circle cx="78" cy="83" r="8"/><circle cx="98" cy="85" r="6"/></g>`,
+  star: `<polygon points="${starPts(50, 53, 44, 21)}" fill="url(#gSun)" stroke="#ffb93a" stroke-width="6" stroke-linejoin="round"/>
+    ${eye(40, 54, 4)}${eye(60, 54, 4)}${blush(31, 62, 5, 3.2)}${blush(69, 62, 5, 3.2)}${smile(50, 62, 5)}`,
+  butterfly: `<g transform="rotate(-18 28 36)"><ellipse cx="28" cy="36" rx="25" ry="23" fill="url(#gPink)"/></g><g transform="rotate(18 72 36)"><ellipse cx="72" cy="36" rx="25" ry="23" fill="url(#gPink)"/></g>
+    <ellipse cx="32" cy="70" rx="18" ry="17" fill="url(#gLilac)"/><ellipse cx="68" cy="70" rx="18" ry="17" fill="url(#gLilac)"/>
+    <g fill="#fff" opacity=".7"><circle cx="26" cy="35" r="7.500"/><circle cx="74" cy="35" r="7.500"/><circle cx="32" cy="71" r="5.500"/><circle cx="68" cy="71" r="5.500"/></g>
+    <path d="M48 17 Q42 4 34 7 M52 17 Q58 4 66 7" fill="none" stroke="#5a4590" stroke-width="2.600" stroke-linecap="round"/>
+    <rect x="45.500" y="24" width="9" height="56" rx="4.500" fill="#5a4590"/><circle cx="50" cy="22" r="7.500" fill="#5a4590"/>`,
+  flower: `${around(5, 25, (x, y) => `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="19" fill="url(#gPink)"/>`)}
+    <circle cx="50" cy="50" r="14" fill="url(#gSun)"/>${gloss(45, 45, 4, 2.5)}`,
+  gem: `<path d="M50 94 L7 40 L26 13 H74 L93 40 Z" fill="url(#gSky)" stroke="#5ab2f3" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M7 40 L26 13 H74 L93 40 Z" fill="#e6f7ff" opacity=".85"/><path d="M36 40 H64 L50 94 Z" fill="#fff" opacity=".28"/>
+    <path d="M7 40 H93 M26 13 L36 40 L50 13 L64 40 L74 13" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".9"/>`,
+  wand: `<path d="M20 88 L56 46" stroke="#9674ee" stroke-width="9" stroke-linecap="round"/><path d="M20 88 L38 67" stroke="#b79cff" stroke-width="9" stroke-linecap="round"/>
+    <polygon points="${starPts(64, 36, 28, 12.5)}" fill="url(#gSun)" stroke="#ffb93a" stroke-width="4" stroke-linejoin="round"/>
+    <g fill="#fff"><circle cx="20" cy="30" r="3"/><circle cx="88" cy="70" r="3.500"/><circle cx="36" cy="14" r="2.200"/></g>`,
+  cat: `<path d="M14 44 L18 11 L44 27 Z" fill="url(#gOrange)" stroke="#ffab52" stroke-width="5" stroke-linejoin="round"/><path d="M86 44 L82 11 L56 27 Z" fill="url(#gOrange)" stroke="#ffab52" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M21 34 L23 19 L35 27 Z" fill="#ffc6df"/><path d="M79 34 L77 19 L65 27 Z" fill="#ffc6df"/>
+    <ellipse cx="50" cy="59" rx="38" ry="32" fill="url(#gOrange)"/>
+    <path d="M50 29 V39 M40 31 L42 39 M60 31 L58 39" stroke="#f08a2b" stroke-width="3.500" stroke-linecap="round"/>
+    <ellipse cx="50" cy="72" rx="17" ry="11" fill="#fff6e8"/><path d="M46.500 66 H53.500 L50 70.500 Z" fill="#ff7fa8" stroke="#ff7fa8" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M50 71 Q46 78 41 75 M50 71 Q54 78 59 75" ${INK}/>${eye(34, 57, 5.2)}${eye(66, 57, 5.2)}${blush(22, 68)}${blush(78, 68)}`,
+  dog: `<g transform="rotate(14 17 50)"><ellipse cx="17" cy="50" rx="12" ry="25" fill="url(#gBrown)"/></g><g transform="rotate(-14 83 50)"><ellipse cx="83" cy="50" rx="12" ry="25" fill="url(#gBrown)"/></g>
+    <ellipse cx="50" cy="56" rx="34" ry="33" fill="url(#gTan)"/><ellipse cx="65" cy="50" rx="11" ry="12" fill="#c98d5c" opacity=".5"/>
+    <ellipse cx="50" cy="72" rx="19" ry="14" fill="#fff8ec"/><path d="M45.500 79 Q50 90 54.500 79 Z" fill="#ff7fa8"/>
+    <ellipse cx="50" cy="65" rx="6.500" ry="4.800" fill="#3a2a66"/><path d="M50 70 V74 M50 74 Q45 80 40 76 M50 74 Q55 80 60 76" ${INK}/>
+    ${eye(36, 51, 4.8)}${eye(64, 51, 4.8)}${blush(25, 64)}${blush(75, 64)}`,
+  bunny: `<g transform="rotate(-8 36 26)"><ellipse cx="36" cy="26" rx="10.500" ry="25" fill="url(#gWhite)" ${W}/><ellipse cx="36" cy="28" rx="4.800" ry="17" fill="#ffc6df"/></g>
+    <g transform="rotate(8 64 26)"><ellipse cx="64" cy="26" rx="10.500" ry="25" fill="url(#gWhite)" ${W}/><ellipse cx="64" cy="28" rx="4.800" ry="17" fill="#ffc6df"/></g>
+    <ellipse cx="50" cy="66" rx="33" ry="29" fill="url(#gWhite)" ${W}/>${eye(38, 63)}${eye(62, 63)}
+    <ellipse cx="50" cy="71" rx="3.600" ry="2.600" fill="#ff7fa8"/><path d="M50 73.600 Q46 79.500 41.500 76.500 M50 73.600 Q54 79.500 58.500 76.500" ${INK}/>${blush(27, 73)}${blush(73, 73)}`,
+  strawberry: `<path d="M50 95 C22 80 9 54 17 36 C25 23 75 23 83 36 C91 54 78 80 50 95 Z" fill="url(#gRed)"/>
+    <g fill="#ffe58a">${[[36, 48], [50, 45], [64, 48], [29, 61], [43, 60], [57, 60], [71, 61], [38, 74], [50, 72], [62, 74], [50, 85]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="1.9" ry="2.700"/>`).join('')}</g>
+    <g fill="url(#gGreen)">${[-70, -35, 0, 35, 70].map(a => `<ellipse cx="50" cy="20" rx="6.500" ry="15" transform="rotate(${a} 50 30)"/>`).join('')}</g>
+    <rect x="47.500" y="6" width="5" height="12" rx="2.500" fill="#31b56a"/>${gloss(30, 44, 4, 9, 20)}`,
+  cupcake: `<path d="M25 58 H75 L68 92 Q50 97 32 92 Z" fill="url(#gSky)"/><path d="M37 60 L40 93 M50 60 V95 M63 60 L60 93" stroke="#fff" stroke-width="2.500" opacity=".55"/>
+    <ellipse cx="50" cy="55" rx="31" ry="12" fill="url(#gPink)"/><ellipse cx="50" cy="43" rx="24" ry="11" fill="url(#gPink)"/><ellipse cx="50" cy="32" rx="16" ry="9.500" fill="url(#gPink)"/>
+    <circle cx="50" cy="19" r="7.500" fill="url(#gRed)"/>${gloss(47.5, 16.5, 2, 1.4)}
+    <g stroke-width="3" stroke-linecap="round"><path d="M32 52 l4 2" stroke="#fff"/><path d="M62 54 l4 -2" stroke="#ffe27a"/><path d="M40 40 l4 1" stroke="#7fd4ff"/><path d="M58 42 l3 -3" stroke="#fff"/><path d="M48 53 l4 1" stroke="#b79cff"/></g>`,
+  balloon: `<path d="M50 80 q-9 9 0 18" fill="none" stroke="#fff" stroke-width="2.500" stroke-linecap="round"/><path d="M44 74 H56 L53 82 H47 Z" fill="#ec3f58"/>
+    <ellipse cx="50" cy="40" rx="32" ry="36" fill="url(#gRed)"/>${gloss(37, 24, 7, 12, -28)}`,
+  bow: `<path d="M44 58 L30 90 L45 82 L50 64 Z" fill="#ff8fc0"/><path d="M56 58 L70 90 L55 82 L50 64 Z" fill="#ff8fc0"/>
+    <path d="M50 50 C30 22 4 26 8 50 C4 74 30 78 50 50 Z" fill="url(#gPink)"/><path d="M50 50 C70 22 96 26 92 50 C96 74 70 78 50 50 Z" fill="url(#gPink)"/>
+    <rect x="41" y="38" width="18" height="24" rx="8" fill="#ff5fa2"/>${gloss(22, 38, 4, 8, 30)}${gloss(72, 38, 4, 8, -30)}`,
+  moon: `<mask id="mMoon"><rect width="100" height="100" fill="#fff"/><circle cx="70" cy="36" r="35"/></mask>
+    <circle cx="46" cy="54" r="41" fill="url(#gSun)" mask="url(#mMoon)"/><path d="M22 58 q5 5 10 0" ${INK}/>${blush(22, 68, 5, 3.2)}
+    <path d="M78 22 Q79.500 30.500 88 32 Q79.500 33.500 78 42 Q76.500 33.500 68 32 Q76.500 30.500 78 22Z" fill="#fff"/><circle cx="90" cy="56" r="2.600" fill="#fff"/>`,
+  sun: `<g fill="#ffc23d">${range(0, 7).map(k => `<rect x="45" y="2" width="10" height="20" rx="5" transform="rotate(${k * 45} 50 50)"/>`).join('')}</g>
+    <circle cx="50" cy="50" r="30" fill="url(#gSun)"/>${eye(40, 47, 4)}${eye(60, 47, 4)}${blush(31, 56, 5, 3.2)}${blush(69, 56, 5, 3.2)}${smile(50, 56, 6)}`,
+  ladybug: `<path d="M42 14 Q36 4 30 6 M58 14 Q64 4 70 6" ${INK}/><circle cx="50" cy="26" r="16" fill="#3a2a66"/><circle cx="43" cy="22" r="4" fill="#fff"/><circle cx="57" cy="22" r="4" fill="#fff"/>
+    <circle cx="44" cy="23" r="1.800" fill="#3a2a66"/><circle cx="58" cy="23" r="1.800" fill="#3a2a66"/>
+    <ellipse cx="50" cy="60" rx="35" ry="33" fill="url(#gRed)"/><path d="M50 28 V93" stroke="#3a2a66" stroke-width="3"/>
+    <g fill="#3a2a66"><circle cx="33" cy="50" r="6.500"/><circle cx="67" cy="50" r="6.500"/><circle cx="29" cy="70" r="5.500"/><circle cx="71" cy="70" r="5.500"/><circle cx="41" cy="82" r="4.200"/><circle cx="59" cy="82" r="4.200"/></g>${gloss(30, 40, 4, 8, 30)}`,
+  fish: `<path d="M68 50 L95 28 Q88 50 95 72 Z" fill="url(#gSky)" stroke="#5ab2f3" stroke-width="3" stroke-linejoin="round"/><path d="M34 30 Q50 10 66 32 Z" fill="#5ab2f3"/>
+    <ellipse cx="44" cy="52" rx="35" ry="25" fill="url(#gSky)"/><ellipse cx="40" cy="62" rx="24" ry="11" fill="#fff" opacity=".4"/>
+    <path d="M48 54 C59 54 63 63 56 70 C52 66 50 61 48 54 Z" fill="#5ab2f3"/>${eye(26, 46, 5.2)}${blush(24, 58, 5, 3.2)}<path d="M12 56 q4 4 9 1" ${INK}/>
+    <g fill="#fff" opacity=".85"><circle cx="8" cy="30" r="3.200"/><circle cx="15" cy="19" r="2.200"/></g>`,
+  turtle: `<ellipse cx="26" cy="76" rx="10" ry="7.500" fill="#9fe6ad"/><ellipse cx="62" cy="76" rx="10" ry="7.500" fill="#9fe6ad"/><path d="M9 68 Q0 64 2 72 Q6 74 10 72 Z" fill="#9fe6ad"/>
+    <circle cx="84" cy="56" r="12.500" fill="#b6f0bd"/>${eye(87, 53, 3.2)}${blush(82, 61, 3.5, 2.2)}<path d="M86 61 q3 3 6 0" ${INK}/>
+    <path d="M8 70 A35 36 0 0 1 78 70 Z" fill="url(#gGreen)"/><g fill="#e2fbd6" opacity=".65"><circle cx="34" cy="50" r="7.500"/><circle cx="56" cy="47" r="8"/><circle cx="46" cy="62" r="5"/><circle cx="66" cy="62" r="4.500"/><circle cx="22" cy="62" r="4.500"/></g>
+    <rect x="5" y="66" width="76" height="9" rx="4.500" fill="#ffe9a8"/>`,
+  icecream: `<path d="M32 54 H68 L50 97 Z" fill="url(#gTan)" stroke="#e3ad6e" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M38 58 L56 82 M47 56 L60 72 M62 58 L44 82 M53 56 L40 72" stroke="#c98d5c" stroke-width="1.800" opacity=".7"/>
+    <circle cx="50" cy="42" r="23" fill="url(#gPink)"/><path d="M29 50 Q34 60 39 52 Q44 62 50 53 Q56 62 61 52 Q66 60 71 50 Z" fill="#ff6aab"/>
+    <circle cx="50" cy="21" r="16" fill="url(#gMint)"/>${gloss(43, 14, 4, 2.6)}${gloss(38, 34, 4, 2.6)}`,
+  chick: `<path d="M44 26 Q42 14 48 18 Q50 10 53 18 Q59 14 56 26 Z" fill="#ffc23d"/>
+    <g transform="rotate(20 19 64)"><ellipse cx="19" cy="64" rx="8.500" ry="13" fill="#ffc23d"/></g><g transform="rotate(-20 81 64)"><ellipse cx="81" cy="64" rx="8.500" ry="13" fill="#ffc23d"/></g>
+    <path d="M38 90 l-4 6 M38 90 l3 6 M62 90 l-3 6 M62 90 l4 6" stroke="#ff9a3d" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="50" cy="58" r="33" fill="url(#gSun)"/>${eye(38, 53)}${eye(62, 53)}${blush(28, 64)}${blush(72, 64)}
+    <path d="M43.500 61 H56.500 L50 69.500 Z" fill="#ff9a3d" stroke="#ff9a3d" stroke-width="2.500" stroke-linejoin="round"/>`,
+  apple: `<path d="M50 31 C30 17 8 31 12 59 C16 85 36 97 50 89 C64 97 84 85 88 59 C92 31 70 17 50 31 Z" fill="url(#gRed)"/>
+    <path d="M50 32 C50 22 53 14 59 9" fill="none" stroke="#8f5631" stroke-width="5" stroke-linecap="round"/>
+    <path d="M57 21 C66 6 83 8 86 12 C82 25 67 28 57 21 Z" fill="url(#gGreen)"/>${gloss(29, 50, 6, 12, 18)}`,
+  heart: `<path d="M50 91 C4 58 9 13 50 34 C91 13 96 58 50 91 Z" fill="url(#gPink)" stroke="#ff6aab" stroke-width="4" stroke-linejoin="round"/>${gloss(28, 40, 6, 10, 30)}`,
+  trophy: `<path d="M28 22 C8 20 10 46 31 48 M72 22 C92 20 90 46 69 48" fill="none" stroke="#ffab33" stroke-width="7" stroke-linecap="round"/>
+    <path d="M26 12 H74 V38 A24 24 0 0 1 26 38 Z" fill="url(#gHorn)"/><rect x="44" y="60" width="12" height="16" fill="#ffab33"/><rect x="30" y="76" width="40" height="13" rx="5" fill="url(#gHorn)"/>
+    <polygon points="${starPts(50, 34, 12, 5.4)}" fill="#fff"/>${gloss(34, 26, 3, 9, 8)}`,
+  hand: `<g transform="rotate(-8 50 50)"><rect x="26" y="46" width="50" height="46" rx="18" fill="url(#gWhite)" ${W}/>
+    <g transform="rotate(-28 24 60)"><ellipse cx="24" cy="60" rx="9" ry="15" fill="url(#gWhite)" ${W}/></g>
+    <rect x="40" y="6" width="18" height="56" rx="9" fill="url(#gWhite)" ${W}/><path d="M58 52 V62 M66 54 V62" stroke="rgba(126,96,204,.45)" stroke-width="1.500" stroke-linecap="round"/></g>`,
+};
+$('.defs defs').insertAdjacentHTML('beforeend', Object.keys(SYM).map(k => `<symbol id="i-${k}" viewBox="0 0 100 100">${SYM[k]}</symbol>`).join(''));
+const pic = id => `<svg class="ic" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-${id}"/></svg>`;
 
 /* ---------- ציורים: כל חלק עם class="r" הוא אזור לצביעה. אותו ציור משמש גם כאיור צבעוני (art) ---------- */
 const T = (x, y, size, fill, txt) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="${size}" font-weight="700" fill="${fill}" style="font-family:var(--font-display)">${txt}</text>`;
@@ -598,7 +740,7 @@ const mascot = () => el('div', { class: 'mascot' }, artSvg(PICS[0]));
    שמירת ההתקדמות (כוכבים, מדבקות, רמות) בדפדפן של המחשב הזה
    ===================================================================== */
 const KEY = 'unicorn-kingdom-v1';
-const DEFAULTS = { name: '', stars: 0, stickers: [], newest: '', levels: { count: 1, numbers: 1, amounts: 1, looks: 1, memory: 1 }, range: 0, sfx: true, speech: true, hinted: false };
+const DEFAULTS = { name: '', stars: 0, stickers: [], newest: '', levels: { count: 1, numbers: 1, amounts: 1, looks: 1, memory: 1, english: 1 }, range: 0, sfx: true, speech: true, hinted: false, voice: '', niqqud: true, english: true };
 let S = JSON.parse(JSON.stringify(DEFAULTS));
 try { const saved = JSON.parse(localStorage.getItem(KEY) || '{}'); Object.assign(S, saved); S.levels = Object.assign({}, DEFAULTS.levels, saved.levels); } catch (e) { /* בלי אחסון המשחק פשוט מתחיל מחדש */ }
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* ממשיכים בלי שמירה */ } };
@@ -643,15 +785,47 @@ const sfx = {
    2. אם אין, ההקראה של Claude (כשהדף נפתח ב-claude.ai והיא תומכת בעברית).
    3. אם אין אף אחד – המשחק ממשיך עם טקסט, אנימציות ורמזים.
    ===================================================================== */
+/* ניקוד להקראה: מנועי דיבור טועים בעברית לא מנוקדת ("עשר", "שבע", "חום", "כתר").
+   לפני ההקראה כל מילה מוכרת מוחלפת בצורתה המנוקדת. הטקסט שעל המסך נשאר בלי ניקוד. */
+const NIQ = {
+  'אחת': 'אַחַת', 'שתיים': 'שְׁתַּיִם', 'שלוש': 'שָׁלוֹשׁ', 'ארבע': 'אַרְבַּע', 'חמש': 'חָמֵשׁ', 'שש': 'שֵׁשׁ', 'שבע': 'שֶׁבַע', 'שמונה': 'שְׁמוֹנֶה', 'תשע': 'תֵּשַׁע', 'עשר': 'עֶשֶׂר',
+  'אחד': 'אֶחָד', 'שני': 'שְׁנֵי', 'שניים': 'שְׁנַיִם', 'שלושה': 'שְׁלוֹשָׁה', 'ארבעה': 'אַרְבָּעָה', 'חמישה': 'חֲמִשָּׁה', 'שישה': 'שִׁשָּׁה', 'שבעה': 'שִׁבְעָה', 'תשעה': 'תִּשְׁעָה', 'עשרה': 'עֲשָׂרָה',
+  'חד': 'חַד', 'חדי': 'חַדֵּי', 'קרן': 'קֶרֶן', 'כתר': 'כֶּתֶר', 'כתרים': 'כְּתָרִים', 'כוכב': 'כּוֹכָב', 'כוכבים': 'כּוֹכָבִים', 'פרפר': 'פַּרְפַּר', 'פרפרים': 'פַּרְפָּרִים',
+  'פרח': 'פֶּרַח', 'פרחים': 'פְּרָחִים', 'בלון': 'בָּלוֹן', 'בלונים': 'בָּלוֹנִים', 'תפוח': 'תַּפּוּחַ', 'תפוחים': 'תַּפּוּחִים', 'יהלום': 'יַהֲלוֹם', 'יהלומים': 'יַהֲלוֹמִים',
+  'אפרוח': 'אֶפְרוֹחַ', 'אפרוחים': 'אֶפְרוֹחִים', 'לב': 'לֵב', 'לבבות': 'לְבָבוֹת',
+  'אדום': 'אָדוֹם', 'כחול': 'כָּחוֹל', 'צהוב': 'צָהוֹב', 'ירוק': 'יָרוֹק', 'ורוד': 'וָרוֹד', 'סגול': 'סָגוֹל', 'כתום': 'כָּתוֹם', 'תכלת': 'תְּכֵלֶת', 'חום': 'חוּם', 'אפרסק': 'אֲפַרְסֵק', 'צבע': 'צֶבַע', 'קסם': 'קֶסֶם',
+  'האדום': 'הָאָדוֹם', 'הכחול': 'הַכָּחוֹל', 'הצהוב': 'הַצָּהוֹב', 'הירוק': 'הַיָּרוֹק', 'הורוד': 'הַוָּרוֹד', 'הסגול': 'הַסָּגוֹל', 'הכתום': 'הַכָּתוֹם',
+  'עיגול': 'עִגּוּל', 'ריבוע': 'רִבּוּעַ', 'משולש': 'מְשֻׁלָּשׁ', 'מלבן': 'מַלְבֵּן', 'מעוין': 'מְעֻיָּן',
+  'העיגול': 'הָעִגּוּל', 'הריבוע': 'הָרִבּוּעַ', 'המשולש': 'הַמְּשֻׁלָּשׁ', 'הכוכב': 'הַכּוֹכָב', 'הלב': 'הַלֵּב', 'המלבן': 'הַמַּלְבֵּן', 'המעוין': 'הַמְּעֻיָּן', 'הבלון': 'הַבָּלוֹן', 'המספר': 'הַמִּסְפָּר',
+  'נסיכה': 'נְסִיכָה', 'ארמון': 'אַרְמוֹן', 'קשת': 'קֶשֶׁת', 'בענן': 'בֶּעָנָן', 'שרביט': 'שַׁרְבִיט', 'קסמים': 'קְסָמִים', 'חתול': 'חָתוּל', 'כלב': 'כֶּלֶב', 'ארנב': 'אַרְנָב', 'תות': 'תּוּת', 'עוגה': 'עוּגָה',
+  'סרט': 'סֶרֶט', 'ירח': 'יָרֵחַ', 'שמש': 'שֶׁמֶשׁ', 'חיפושית': 'חִפּוּשִׁית', 'דג': 'דָּג', 'צב': 'צָב', 'גלידה': 'גְּלִידָה', 'גביע': 'גָּבִיעַ',
+  'בואי': 'בּוֹאִי', 'נספור': 'נִסְפּוֹר', 'לחצי': 'לַחֲצִי', 'ולחצי': 'וְלַחֲצִי', 'על': 'עַל', 'כל': 'כָּל', 'איפה': 'אֵיפֹה', 'נכון': 'נָכוֹן', 'זה': 'זֶה', 'כמה': 'כַּמָּה', 'יש': 'יֵשׁ', 'שוב': 'שׁוּב',
+  'יותר': 'יוֹתֵר', 'פחות': 'פָּחוֹת', 'כאן': 'כָּאן', 'מצאי': 'מִצְאִי', 'קלפים': 'קְלָפִים', 'אותו': 'אוֹתוֹ', 'דבר': 'דָּבָר', 'איזה': 'אֵיזֶה', 'איזו': 'אֵיזוֹ', 'ציור': 'צִיּוּר', 'הציור': 'הַצִּיּוּר', 'נצבע': 'נִצְבַּע',
+  'בחרי': 'בַּחֲרִי', 'יפה': 'יָפֶה', 'הכבוד': 'הַכָּבוֹד', 'קיבלת': 'קִבַּלְתְּ', 'מתנה': 'מַתָּנָה', 'המתנה': 'הַמַּתָּנָה', 'עליה': 'עָלֶיהָ', 'זכית': 'זָכִית', 'מדבקה': 'מַדְבֵּקָה', 'במדבקה': 'בְּמַדְבֵּקָה',
+  'מדבקות': 'מַדְבֵּקוֹת', 'במדבקות': 'בְּמַדְבֵּקוֹת', 'המדבקות': 'הַמַּדְבֵּקוֹת', 'חדשה': 'חֲדָשָׁה', 'אספת': 'אָסַפְתְּ', 'את': 'אֶת', 'האלבום': 'הָאַלְבּוֹם', 'עוד': 'עוֹד', 'ריק': 'רֵיק', 'שחקי': 'שַׂחֲקִי',
+  'כדי': 'כְּדֵי', 'לזכות': 'לִזְכּוֹת', 'לך': 'לָךְ', 'שלום': 'שָׁלוֹם', 'במה': 'בַּמֶּה', 'נשחק': 'נְשַׂחֵק', 'היום': 'הַיּוֹם', 'תמונה': 'תְּמוּנָה', 'אני': 'אֲנִי',
+  'יופי': 'יוֹפִי', 'מצוין': 'מְצֻיָּן', 'נהדר': 'נֶהְדָּר', 'אלופה': 'אַלּוּפָה', 'חכמה': 'חֲכָמָה', 'מאוד': 'מְאוֹד',
+};
+// "שמונה" לפני שם עצם בזכר ("שמונה כתרים") נהגה shmoná, ולבד shmoné
+const MASC8 = new RegExp('שמונה(?= (?:' + ITEMS.map(it => it.many.split(' ')[0]).join('|') + '))', 'g');
+function vocalize(t) {
+  if (!S.niqqud) return t;
+  return t.replace(MASC8, 'שְׁמוֹנָה').replace(/[א-ת]+/g, w => NIQ[w] || w);
+}
 const Voice = {
-  he: null, tts: null, ttsState: 'idle', keep: null,
+  he: null, list: [], enV: null, tts: null, ttsState: 'idle', keep: [],
   init() {
     if ('speechSynthesis' in window) {
       const pickVoice = () => {
         const vs = speechSynthesis.getVoices().filter(v => /^(he|iw)/i.test(v.lang));
-        const score = v => (/natural|online/i.test(v.name) ? 2 : 0) + (/hila/i.test(v.name) ? 1 : 0);
+        // קולות "Natural" / "Online" (כמו ב-Edge) נשמעים הרבה יותר טוב מהקולות הישנים של Windows
+        const score = v => (/natural/i.test(v.name) ? 4 : 0) + (/online|google/i.test(v.name) ? 2 : 0) + (/hila/i.test(v.name) ? 1 : 0);
         vs.sort((a, b) => score(b) - score(a));
-        this.he = vs[0] || null; voiceUI();
+        // קול אנגלי למילים באנגלית (בעדיפות קול טבעי אמריקאי)
+        const ens = speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang));
+        const enScore = v => score(v) + (/en-US/i.test(v.lang) ? 1 : 0) + (/aria|jenny|ana|zira|samantha/i.test(v.name) ? 1 : 0);
+        ens.sort((a, b) => enScore(b) - enScore(a)); this.enV = ens[0] || null;
+        this.list = vs; this.he = vs.find(v => v.name === S.voice) || vs[0] || null; voiceUI();
       };
       pickVoice();
       if (speechSynthesis.addEventListener) speechSynthesis.addEventListener('voiceschanged', pickVoice);
@@ -676,25 +850,36 @@ const Voice = {
     try { if (this.mode === 'browser') speechSynthesis.cancel(); else if (this.tts) this.tts.stop().catch(() => {}); } catch (e) { /* אין מה לעצור */ }
   },
   // minor = מילים קצרות (ספירה, שם של קלף). בהקראה של Claude מדלגים עליהן כדי לא לחרוג מהקצב המותר.
-  say(text, o = {}) {
-    const mode = this.mode;
-    if (mode === 'browser') return new Promise(res => {
-      try {
-        speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.voice = this.he; u.lang = this.he.lang; u.rate = .92; u.pitch = 1.12;
-        let done = false; const fin = () => { if (!done) { done = true; res(); } };
-        u.onend = fin; u.onerror = fin; setTimeout(fin, 1500 + text.length * 130);
-        this.keep = u; speechSynthesis.speak(u);
-      } catch (e) { res(); }
-    });
+  // o.en = מילה באנגלית שנשמעת אחרי העברית (בקול אנגלי), כשהאנגלית פעילה או במשחק האנגלית
+  say(shown, o = {}) {
+    const mode = this.mode, en = o.en && (S.english || (round && round.id === 'english')) ? o.en : '';
     if (mode === 'tts') {
       if (o.minor) return Promise.resolve();
-      return this.tts.speak(text, { language: 'he', rate: .95 }).then(() => {}, err => {
+      const lines = [];
+      if (shown) lines.push({ text: vocalize(shown), language: 'he' });
+      if (en) lines.push({ text: en, language: 'en', rate: .85 });
+      if (!lines.length) return Promise.resolve();
+      return this.tts.speak(lines, { rate: .95 }).then(() => {}, err => {
         if (err && (err.code === 'not_granted' || err.code === 'unavailable')) { this.tts = null; voiceUI(); }
       });
     }
-    return Promise.resolve();
+    const parts = [];
+    if (shown && mode === 'browser') parts.push({ t: vocalize(shown), v: this.he, rate: .9 });
+    if (en && S.speech && this.enV) parts.push({ t: en, v: this.enV, rate: .8 });
+    if (!parts.length) return Promise.resolve();
+    return new Promise(res => {
+      let done = false; const fin = () => { if (!done) { done = true; res(); } };
+      try {
+        speechSynthesis.cancel(); this.keep = [];
+        parts.forEach((p, i) => {
+          const u = new SpeechSynthesisUtterance(p.t);
+          u.voice = p.v; u.lang = p.v.lang; u.rate = p.rate; u.pitch = 1;
+          if (i === parts.length - 1) { u.onend = fin; u.onerror = fin; }
+          this.keep.push(u); speechSynthesis.speak(u);
+        });
+        setTimeout(fin, 1500 + ((shown || '').length + en.length) * 130);
+      } catch (e) { fin(); }
+    });
   },
 };
 function voiceUI() {
@@ -707,12 +892,13 @@ function voiceUI() {
 function voiceStatus() {
   const m = Voice.mode;
   if (m === 'off') return 'ההקראה כבויה.';
-  if (m === 'browser') return `ההקראה פעילה בקול העברי של הדפדפן (${Voice.he.name}).`;
+  const enTxt = Voice.enV ? ` מילים באנגלית: ${Voice.enV.name}.` : ' לא נמצא קול אנגלי.';
+  if (m === 'browser') return `ההקראה פעילה בקול העברי של הדפדפן (${Voice.he.name}).${enTxt}`;
   if (m === 'tts') return 'ההקראה פעילה בקול של Claude.';
   return 'לא נמצא קול עברי בדפדפן הזה, ולכן ההוראות מוצגות בלי הקראה. כדי לשמוע אותן: פתחו את המשחק ב-Microsoft Edge, או התקינו ב-Windows את חבילת הדיבור בעברית (הגדרות ← זמן ושפה ← דיבור) ופתחו מחדש.';
 }
 // מחכה לסוף המשפט, אבל לא יותר מ-max אלפיות שנייה, כדי שהמשחק לא ייתקע
-const sayWait = (text, max) => Promise.all([Promise.race([Voice.say(text), wait(max)]), wait(900)]);
+const sayWait = (text, max, en) => Promise.all([Promise.race([Voice.say(text, { en }), wait(max)]), wait(900)]);
 
 /* =====================================================================
    מגע שמתאים לילדה בת 3:
@@ -768,7 +954,7 @@ function clearIdle() { idleFn = null; clearTimeout(idleT); }
 function idleKick() { clearTimeout(idleT); if (idleFn) idleT = setTimeout(() => { if (idleFn) idleFn(); idleKick(); }, 13000); }
 function showHand(node) {
   removeHand(); const r = node.getBoundingClientRect();
-  hand = el('div', { class: 'hand', text: '👆', 'aria-hidden': 'true' });
+  hand = el('div', { class: 'hand', html: pic('hand'), 'aria-hidden': 'true' });
   hand.style.left = (r.left + r.width / 2) + 'px'; hand.style.top = (r.top + r.height * .6) + 'px';
   document.body.append(hand);
 }
@@ -849,19 +1035,21 @@ function addStar(n = 1, from) {
   S.stars += n; save();
   flyStar(from).then(() => { const b = $('.pill b'); if (b) { b.textContent = S.stars; anim(b.parentNode, 'press'); } });
 }
-function askBubble(text, chip) {
+function askBubble(text, chip, o) {
+  const speak = () => Voice.say(o && o.say != null ? o.say : text, { en: o && o.en });
   const b = el('button', { class: 'ask' }, el('span', { class: 'who', 'aria-hidden': 'true' }, artSvg(PICS[1], '98 14 204 204')), el('span', { class: 'say', text }),
     chip != null ? el('span', { class: 'chip', text: chip }) : null, el('span', { class: 'ear', 'aria-hidden': 'true', html: ico('sound', 'i-snd') + ico('stop', 'i-stop') }));
-  onTap(b, () => { if (Voice.speaking()) Voice.stop(); else Voice.say(text); });
+  onTap(b, () => { if (Voice.speaking()) Voice.stop(); else speak(); });
   return b;
 }
 // בונה מסך שאלה: בועת הוראה (שמוקראת בקול) ולוח עם שדה ריק למטרות
-function scene(text, chip) {
+function scene(text, chip, o) {
   frozen = false; qMiss = 0; removeHand();
-  const field = el('div', { class: 'field' }), ask = askBubble(text, chip);
+  const field = el('div', { class: 'field' }), ask = askBubble(text, chip, o);
+  const speak = () => Voice.say(o && o.say != null ? o.say : text, { en: o && o.en });
   stage.replaceChildren(ask, el('div', { class: 'board' }, field));
-  Voice.say(text);
-  setIdle(() => { Voice.say(text); field.querySelectorAll('[data-tap]:not(.off)').forEach(n => anim(n, 'hop')); });
+  speak();
+  setIdle(() => { speak(); field.querySelectorAll('[data-tap]:not(.off)').forEach(n => anim(n, 'hop')); });
   queueMicrotask(() => enter([ask, ...field.children]));
   return field;
 }
@@ -875,24 +1063,25 @@ function nextQ() {
   if (round.done >= round.total) return finishRound(round.miss <= 1, round.miss >= 5);
   renderProg(); GAMES[round.id]();
 }
-async function correct(node, text) {
+async function correct(node, text, en) {
   const g = gen; frozen = true; clearIdle(); removeHand();
   round.done++; renderProg(); addStar(1, node); sfx.good();
   if (node) { anim(node, 'hop'); burstAt(node, 22); }
-  await sayWait(text, 3200); if (g !== gen) return;
+  await sayWait(text, 3200, en); if (g !== gen) return;
   await wait(400); if (g !== gen) return;
   nextQ();
 }
 // טעות: בלי עונש. האפשרות השגויה נעלמת, המשחק אומר מה היא, ואחרי שתי טעויות התשובה הנכונה מהבהבת.
 function wrong(node, text, right) {
-  round.miss++; qMiss++; sfx.oops(); anim(node, 'wobble'); node.classList.add('off', 'dim'); Voice.say(text);
+  const [t, en] = [].concat(text);
+  round.miss++; qMiss++; sfx.oops(); anim(node, 'wobble'); node.classList.add('off', 'dim'); Voice.say(t, { en });
   if (qMiss >= 2 && right) right.classList.add('glow');
 }
 function choices(field, list, make, isRight, okText, noText) {
   const nodes = list.map(make), right = nodes[list.findIndex(isRight)];
   nodes.forEach((n, i) => {
     const v = list[i];
-    onTap(n, () => { if (isRight(v)) correct(n, okText(v)); else wrong(n, noText(v), right); });
+    onTap(n, () => { if (isRight(v)) correct(n, ...[].concat(okText(v))); else wrong(n, noText(v), right); });
     field.append(n);
   });
 }
@@ -911,12 +1100,12 @@ const GAMES = {
   count() {
     const max = maxN('count'), lo = max <= 3 ? 1 : max <= 5 ? 2 : 3;
     const n = pickNew('countN', range(lo, max)), it = pickNew('item', ITEMS), g = gen;
-    const field = scene(`בואי נספור! געי בכל ${it.one}`);
+    const field = scene(`בואי נספור! לחצי על כל ${it.one}`);
     const tally = el('div', { class: 'tally', 'aria-live': 'polite' });
     field.after(tally);
     let c = 0; const nodes = [];
     for (let i = 0; i < n; i++) {
-      const b = el('button', { class: 'tgt', 'aria-label': it.one, text: it.e });
+      const b = el('button', { class: 'tgt', 'aria-label': it.one, html: pic(it.i) });
       onTap(b, async () => {
         if (b.classList.contains('counted')) return;
         removeHand(); if (!S.hinted) { S.hinted = true; save(); }
@@ -926,13 +1115,13 @@ const GAMES = {
         if (c < n) return;
         frozen = true; clearIdle();
         await wait(900); if (g !== gen) return;
-        correct(tally, `${phrase(n, it)}! ${praise()}`);
+        correct(tally, `${phrase(n, it)}! ${praise()}`, enPhrase(n, it));
       });
       nodes.push(b); field.append(b);
     }
     const hint = () => { const left = nodes.find(x => !x.classList.contains('counted')); if (left) showHand(left); };
     if (!S.hinted) setTimeout(() => { if (g === gen && c === 0) hint(); }, 900);
-    setIdle(() => { Voice.say(`געי בכל ${it.one}`); hint(); });
+    setIdle(() => { Voice.say(`לחצי על כל ${it.one}`); hint(); });
   },
 
   // זיהוי מספרים: מוצאים את הבלון עם המספר שהנסיכה אומרת
@@ -944,20 +1133,20 @@ const GAMES = {
     const field = scene(`איפה המספר ${NUM_F[t]}?`, silent || max <= 3 ? t : null);
     const cols = shuffle(NUM_BALLOONS);
     choices(field, opts, (v, i) => balloon(cols[i], v, i),
-      v => v === t, v => `נכון! זה המספר ${NUM_F[v]}`, v => `זה ${NUM_F[v]}. איפה ${NUM_F[t]}?`);
+      v => v === t, v => [`נכון! זה המספר ${NUM_F[v]}`, EN_NUM[v]], v => `זה ${NUM_F[v]}. איפה ${NUM_F[t]}?`);
   },
 
   // כמויות: פעם "כמה יש?" (כמות מול ספרה) ופעם "איפה יש יותר?" (השוואה)
   amounts() {
     const max = maxN('amounts'), it = pickNew('item', ITEMS);
-    const dots = (n, node) => { for (let i = 0; i < n; i++) node.append(el('span', { text: it.e })); return node; };
+    const dots = (n, node) => { for (let i = 0; i < n; i++) node.append(el('span', { html: pic(it.i) })); return node; };
     if (round.done % 2 === 0) {
       const n = pickNew('amtN', range(1, max));
       const field = scene(`כמה ${it.many} יש?`);
       field.before(dots(n, el('div', { class: 'group', role: 'img', 'aria-label': phrase(n, it) })));
       const set = new Set([n]); while (set.size < Math.min(3, max)) set.add(clamp(n + rnd(-2, 2), 1, max));
       choices(field, shuffle([...set]), v => el('button', { class: 'tgt num', text: v }),
-        v => v === n, () => `נכון! ${phrase(n, it)}`, v => `זה ${NUM_F[v]}. בואי נספור שוב`);
+        v => v === n, () => [`נכון! ${phrase(n, it)}`, enPhrase(n, it)], v => `זה ${NUM_F[v]}. בואי נספור שוב`);
     } else {
       const minD = max > 3 ? 2 : 1; let a, b;
       do { a = rnd(1, max); b = rnd(1, max); } while (Math.abs(a - b) < minD);
@@ -977,13 +1166,13 @@ const GAMES = {
       const opts = sample(lv === 1 ? COLORS.slice(0, 4) : COLORS, lv === 3 ? 4 : 3), t = pickNew('col', opts);
       const field = scene(`איפה הבלון ה${t.name}?`);
       choices(field, opts, (c, i) => balloon(c.hex, null, i, c.name),
-        c => c === t, c => `נכון! זה ${c.name}`, c => `זה ${c.name}. איפה ה${t.name}?`);
+        c => c === t, c => [`נכון! זה ${c.name}`, EN[c.name]], c => `זה ${c.name}. איפה ה${t.name}?`);
     } else {
       const opts = sample(SHAPES.slice(0, lv === 1 ? 3 : lv === 2 ? 5 : 7), lv === 3 ? 4 : 3), t = pickNew('shape', opts);
       const cols = shuffle(COLORS);
       const field = scene(`איפה ה${t.name}?`);
       choices(field, opts, (s, i) => el('button', { class: 'tgt', 'aria-label': s.name, html: shapeSvg(s, cols[i].hex) }),
-        s => s === t, s => `נכון! זה ${s.name}`, s => `זה ${s.name}. איפה ה${t.name}?`);
+        s => s === t, s => [`נכון! זה ${s.name}`, EN[s.name]], s => `זה ${s.name}. איפה ה${t.name}?`);
     }
   },
 
@@ -991,14 +1180,14 @@ const GAMES = {
   memory() {
     const pairs = round.total, g = gen, cols = pairs === 2 ? 2 : pairs === 3 ? 3 : 4;
     const faces = sample(STICKERS, pairs), deck = shuffle([...faces, ...faces]);
-    const field = scene('מצאי שני קלפים זהים');
+    const field = scene('מצאי שני קלפים אותו דבר');
     field.style.maxWidth = `calc(var(--tile)*${cols} + var(--gap)*${cols - 1} + 4px)`;
     let open = [], busy = false;
     deck.forEach(f => {
-      const c = el('button', { class: 'card', 'aria-label': 'קלף' }, el('span', { class: 'in' }, el('span', { class: 'b', html: STAR }), el('span', { class: 'f', text: f.e })));
+      const c = el('button', { class: 'card', 'aria-label': 'קלף' }, el('span', { class: 'in' }, el('span', { class: 'b', html: STAR }), el('span', { class: 'f', html: pic(f.i) })));
       onTap(c, async () => {
         if (busy || c.classList.contains('up')) return;
-        c.classList.add('up'); sfx.flip(); Voice.say(f.name, { minor: true });
+        c.classList.add('up'); sfx.flip(); Voice.say(f.name, { minor: true, en: EN[f.name] });
         open.push({ c, f }); if (open.length < 2) return;
         busy = true; const [x, y] = open; open = [];
         if (x.f === y.f) {
@@ -1017,6 +1206,30 @@ const GAMES = {
     });
     renderProg();
   },
+};
+
+/* ---------- אנגלית: הנסיכה אומרת מילה באנגלית, ומוצאים את התמונה המתאימה ----------
+   רמה 1: צבעים וחיות/חפצים (3 אפשרויות). רמה 2: גם מספרים עד 5. רמה 3: מספרים עד 10, 4 אפשרויות. */
+const EN_PICS = ['cat', 'dog', 'bunny', 'fish', 'turtle', 'chick', 'butterfly', 'ladybug', 'unicorn', 'sun', 'moon', 'star',
+  'flower', 'balloon', 'crown', 'castle', 'princess', 'rainbow', 'strawberry', 'icecream', 'cupcake'].map(i => STICKERS.find(s => s.i === i));
+GAMES.english = function () {
+  const lv = S.levels.english, k = lv === 3 ? 4 : 3;
+  const kinds = lv === 1 ? ['color', 'pic'] : ['color', 'pic', 'number'];
+  const kind = kinds[round.done % kinds.length];
+  let opts, make, heb, word;
+  if (kind === 'color') {
+    opts = sample(lv === 1 ? COLORS.slice(0, 4) : COLORS, k); heb = c => c.name; word = c => EN[c.name];
+    make = (c, i) => balloon(c.hex, null, i, c.name);
+  } else if (kind === 'number') {
+    opts = sample(range(1, lv === 3 ? 10 : 5), k); heb = v => NUM_F[v]; word = v => EN_NUM[v];
+    const cols = shuffle(NUM_BALLOONS); make = (v, i) => balloon(cols[i], v, i);
+  } else {
+    opts = sample(EN_PICS, k); heb = s => s.name; word = s => EN[s.name];
+    make = s => el('button', { class: 'tgt', 'aria-label': s.name, html: pic(s.i) });
+  }
+  const t = pickNew('en' + kind, opts), w = word(t);
+  const field = scene(`איפה ⁦${w}⁩?`, null, { say: 'איפה', en: w });
+  choices(field, opts, make, v => v === t, v => [`נכון! זה ${heb(v)}`, word(v)], v => [`זה ${heb(v)}. איפה`, w]);
 };
 
 /* ---------- צביעה: בוחרים ציור, בוחרים צבע, ונוגעים בחלק כדי למלא אותו ---------- */
@@ -1048,11 +1261,11 @@ function paint(p) {
   }));
   PAINTS.forEach((c, i) => {
     const sw = el('button', { class: 'sw' + (c.rainbow ? ' rb' : '') + (i === 0 ? ' sel' : ''), 'aria-label': c.name, style: c.rainbow ? '' : `--c:${c.hex}` });
-    onTap(sw, () => { color = c; pal.querySelectorAll('.sw').forEach(x => x.classList.remove('sel')); sw.classList.add('sel'); sfx.pop(); Voice.say(c.name, { minor: true }); });
+    onTap(sw, () => { color = c; pal.querySelectorAll('.sw').forEach(x => x.classList.remove('sel')); sw.classList.add('sel'); sfx.pop(); Voice.say(c.name, { minor: true, en: EN[c.name] }); });
     pal.append(sw);
   });
   pal.append(done);
-  const text = 'בחרי צבע וגעי בציור';
+  const text = 'בחרי צבע ולחצי על הציור';
   stage.replaceChildren(askBubble(text), el('div', { class: 'paint' }, easel, pal));
   Voice.say(text);
   setIdle(() => Voice.say(text));
@@ -1068,16 +1281,16 @@ function gift() {
   renderBar('game'); round = null; renderProg();
   const g = gen;
   const head = el('h2', { class: 'title', text: toYou('קיבלת מתנה!') });
-  const box = el('button', { class: 'gift', 'aria-label': 'מתנה, געי כדי לפתוח', html: GIFT });
+  const box = el('button', { class: 'gift', 'aria-label': 'מתנה, לחצי כדי לפתוח', html: GIFT });
   stage.replaceChildren(head, box);
-  sfx.sparkle(); Voice.say(toYou('קיבלת מתנה! געי בה'));
-  setIdle(() => { Voice.say('געי במתנה'); showHand(box); });
+  sfx.sparkle(); Voice.say(toYou('קיבלת מתנה! לחצי עליה'));
+  setIdle(() => { Voice.say('לחצי על המתנה'); showHand(box); });
   onTap(box, async () => {
     clearIdle(); removeHand(); box.classList.add('off');
     const left = STICKERS.filter(s => !S.stickers.includes(s.e));
     let won;
     if (left.length) { won = pick(left); S.stickers.push(won.e); S.newest = won.e; }
-    else { won = { e: '🏆', name: 'גביע' }; S.stars += 5; }
+    else { won = { i: 'trophy', name: 'גביע' }; S.stars += 5; }
     save(); starEl.querySelector('b').textContent = S.stars;
     sfx.fanfare();
     // המכסה עף, ואז המדבקה קופצת החוצה על רקע קרני אור
@@ -1086,9 +1299,9 @@ function gift() {
     await wait(reduced ? 0 : 420); if (g !== gen) return;
     party();
     head.textContent = left.length ? 'מדבקה חדשה!' : 'אספת את כל המדבקות!';
-    const prize = el('div', { class: 'prize' }, el('div', { class: 'rays' }), el('div', { class: 'slot got won', text: won.e }));
+    const prize = el('div', { class: 'prize' }, el('div', { class: 'rays' }), el('div', { class: 'slot got won', html: pic(won.i) }));
     box.replaceWith(prize); prize.after(el('div', { class: 'wname', text: won.name }));
-    Voice.say(left.length ? `זכית במדבקה חדשה: ${won.name}!` : 'אספת את כל המדבקות! כל הכבוד!');
+    Voice.say(left.length ? `זכית במדבקה חדשה: ${won.name}!` : 'אספת את כל המדבקות! כל הכבוד!', { en: EN[won.name] });
     await wait(1500); if (g !== gen) return;
     const acts = el('div', { class: 'acts' },
       act('replay', 'עוד פעם', () => go(() => startGame(lastGame)), true),
@@ -1103,8 +1316,8 @@ function album() {
   STICKERS.forEach((s, i) => {
     const got = S.stickers.includes(s.e);
     const slot = el(got ? 'button' : 'div', { class: 'slot ' + (got ? 'got' : 'no') + (got && s.e === S.newest ? ' new' : ''),
-      style: `--rot:${(i * 37 % 13) - 6}deg`, 'aria-label': got ? s.name : 'מדבקה שעוד לא נאספה', text: got ? s.e : '?' });
-    if (got) onTap(slot, () => { anim(slot, 'hop'); sfx.pop(); burstAt(slot, 8); Voice.say(s.name); });
+      style: `--rot:${(i * 37 % 13) - 6}deg`, 'aria-label': got ? s.name : 'מדבקה שעוד לא נאספה', html: got ? pic(s.i) : '?' });
+    if (got) onTap(slot, () => { anim(slot, 'hop'); sfx.pop(); burstAt(slot, 8); Voice.say(s.name, { en: EN[s.name] }); });
     grid.append(slot);
   });
   stage.replaceChildren(el('h2', { class: 'title', text: S.name ? `האלבום של ${S.name}` : 'האלבום שלי' }),
@@ -1133,6 +1346,10 @@ const MENU = [
   { id: 'memory', name: 'זיכרון', c: ['#d3ecff', '#93cbfa', 'rgba(70,150,230,.55)'],
     ic: `<g transform="rotate(-12 42 46)"><rect x="18" y="12" width="48" height="66" rx="11" fill="url(#gLilac)"/><polygon points="${starPts(42, 46, 14, 6.2)}" fill="#fff"/></g>
       <g transform="rotate(10 82 48)"><rect x="58" y="14" width="48" height="66" rx="11" fill="#fff"/><path d="M82 62 C62 46 69 28 82 39 C95 28 102 46 82 62 Z" fill="url(#gPink)"/></g>` },
+  { id: 'english', name: 'אנגלית', c: ['#fbe0ff', '#e3a6f3', 'rgba(190,90,220,.55)'],
+    ic: `<g transform="rotate(-9 30 54)"><rect x="9" y="33" width="42" height="42" rx="11" fill="url(#gPink)"/>${T(30, 64, 30, '#fff', 'A')}</g>
+      <rect x="40" y="14" width="42" height="42" rx="11" fill="url(#gSky)"/>${T(61, 45, 30, '#fff', 'B')}
+      <g transform="rotate(9 91 58)"><rect x="70" y="37" width="42" height="42" rx="11" fill="url(#gSun)"/>${T(91, 68, 30, '#fff', 'C')}</g>` },
   { id: 'paint', name: 'צביעה', c: ['#ffe3d0', '#ffb58c', 'rgba(240,130,80,.55)'],
     ic: `<path d="M60 10 C92 8 114 26 112 50 C110 70 94 66 86 60 C76 54 70 62 74 72 C78 84 60 86 42 82 C18 76 6 58 10 40 C14 22 34 12 60 10 Z" fill="url(#gPeach)"/>
       <circle cx="32" cy="40" r="10" fill="url(#gPink)"/><circle cx="54" cy="26" r="10" fill="url(#gSun)"/><circle cx="80" cy="26" r="10" fill="url(#gMint)"/><circle cx="96" cy="44" r="8.5" fill="url(#gSky)"/><circle cx="40" cy="62" r="9" fill="url(#gLilac)"/>` },
@@ -1145,13 +1362,13 @@ function home() {
   MENU.forEach(t => menu.append(onTap(el('button', { class: 'mtile', style: `--c1:${t.c[0]};--c2:${t.c[1]};--cs:${t.c[2]}`, html: tileSvg(t.ic) + `<span>${t.name}</span>` }), () => { sfx.pop(); go(() => startGame(t.id)); })));
   stage.replaceChildren(el('div', { class: 'home' }, el('div', { class: 'hero' }, el('h1', { class: 'title', text: kingdom() }), m), menu));
   queueMicrotask(() => enter([...menu.children]));
-  setIdle(() => Voice.say('במה נשחק? געי בתמונה'));
+  setIdle(() => Voice.say('במה נשחק? לחצי על תמונה'));
 }
 function startScreen() {
   bar.hidden = true;
   const note = el('p', { class: 'note', id: 'voiceNote', hidden: '', text: 'להורים: לא נמצא קול עברי בדפדפן הזה, ולכן ההוראות יוצגו בלי הקראה. פרטים בכפתור "להורים" במסך הבית.' });
   stage.replaceChildren(el('div', { class: 'start' }, mascot(), el('h1', { class: 'title', text: kingdom() }),
-    el('div', { class: 'go', role: 'button', tabindex: '0', 'aria-label': 'התחילי לשחק', html: ico('play') }), el('div', { class: 'sub', text: 'געי כדי להתחיל' }), note,
+    el('div', { class: 'go', role: 'button', tabindex: '0', 'aria-label': 'התחילי לשחק', html: ico('play') }), el('div', { class: 'sub', text: 'לחצי כדי להתחיל' }), note,
     S.name ? null : el('p', { class: 'note', text: 'להורים: כדי שהמשחק יפנה לילדה בשמה, כתבו את השם בכפתור "להורים" במסך הבית. השם נשמר רק בדפדפן הזה.' })));
   voiceUI();
   // מתחילים בשחרור האצבע (pointerup), כי רק אז הדפדפן מרשה להשמיע קול
@@ -1193,6 +1410,7 @@ function openParents() {
       <dt>כמה יש?</dt><dd>כמויות: התאמת כמות לספרה, והשוואה בין יותר לפחות.</dd>
       <dt>צבעים וצורות</dt><dd>שמות הצבעים והצורות הבסיסיות.</dd>
       <dt>זיכרון</dt><dd>זיכרון חזותי וריכוז, עם 2 עד 4 זוגות קלפים.</dd>
+      <dt>אנגלית</dt><dd>מילים ראשונות באנגלית: צבעים, מספרים, חיות וחפצים. הנסיכה אומרת מילה באנגלית (למשל red או cat) ומוצאים את התמונה. גם בשאר המשחקים, אחרי תשובה נכונה נשמעת המילה באנגלית.</dd>
       <dt>צביעה</dt><dd>מוטוריקה עדינה, בחירת צבעים ויצירה חופשית.</dd>
     </dl>
     <h3>פרסים וקושי</h3>
@@ -1203,6 +1421,9 @@ function openParents() {
     <select id="p-range"><option value="0">אוטומטי: מתחיל ב-3 ועולה עד 10</option><option value="3">עד 3</option><option value="5">עד 5</option><option value="10">עד 10</option></select>
     <label class="chk" for="p-sfx"><input type="checkbox" id="p-sfx"> צלילים</label>
     <label class="chk" for="p-speech"><input type="checkbox" id="p-speech"> הקראה בקול</label>
+    <label for="p-voicesel" id="p-voicelab">קול ההקראה</label><select id="p-voicesel"></select>
+    <label class="chk" for="p-niq"><input type="checkbox" id="p-niq"> הקראה מטקסט מנוקד (הגייה מדויקת יותר)</label>
+    <label class="chk" for="p-en"><input type="checkbox" id="p-en"> מילים באנגלית אחרי תשובה נכונה (red, three, cat)</label>
     <p class="status" id="p-voice"></p>
     <div class="row">
       <button type="button" id="p-test">בדיקת הקראה</button>
@@ -1219,7 +1440,17 @@ function openParents() {
   rng.addEventListener('change', () => { S.range = Number(rng.value); save(); });
   sf.addEventListener('change', () => { S.sfx = sf.checked; save(); });
   sp.addEventListener('change', () => { S.speech = sp.checked; save(); voiceUI(); });
-  $('#p-test').addEventListener('click', () => { audio(); sfx.good(); Voice.say(hi('בואי נספור: אחת, שתיים, שלוש')); });
+  // בחירת קול: כל הקולות העבריים שהדפדפן מציע, הטוב ביותר ראשון
+  const vsel = $('#p-voicesel'), niq = $('#p-niq');
+  Voice.list.forEach(v => vsel.append(el('option', { value: v.name, text: v.name })));
+  if (Voice.he) vsel.value = Voice.he.name;
+  vsel.hidden = $('#p-voicelab').hidden = Voice.list.length < 2;
+  vsel.addEventListener('change', () => { S.voice = vsel.value; Voice.he = Voice.list.find(v => v.name === S.voice) || Voice.he; save(); voiceUI(); });
+  niq.checked = S.niqqud;
+  niq.addEventListener('change', () => { S.niqqud = niq.checked; save(); });
+  const enc = $('#p-en'); enc.checked = S.english;
+  enc.addEventListener('change', () => { S.english = enc.checked; save(); });
+  $('#p-test').addEventListener('click', () => { audio(); sfx.good(); Voice.say(hi('בואי נספור: אחת, שתיים, שלוש. איפה הבלון האדום? כל הכבוד!'), { en: 'Red! One, two, three!' }); });
   $('#p-full').addEventListener('click', () => {
     try {
       if (document.fullscreenElement) document.exitFullscreen();
